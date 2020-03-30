@@ -22,7 +22,7 @@ class Compile {
     Array.from(childNodes).forEach(node => {
       // 判断元素节点
       if (this.isElement(node)) {
-        console.log('元素节点'+ node.nodeName);
+        // console.log('元素节点'+ node.nodeName);
         // 编译元素节点
         this.compileElement(node)
       } else if(this.isInter(node)){
@@ -68,6 +68,9 @@ class Compile {
         // 指令 v-text v-model
         const dir = attrName.substring(2);
         this[dir] && this[dir](node, exp)
+      } else if(attrName.indexOf('@') === 0) {
+        const dir = attrName.substring(1);
+        this.eventHandler(node, exp, dir);
       }
     })
   }
@@ -90,9 +93,43 @@ class Compile {
     this.update(node, exp, 'text')
   }
 
+  // v-model编译
+  model(node, exp) {
+    // 初始值
+    this.update(node, exp, 'model')
+    // 绑定input事件
+    node.addEventListener('input', e => {
+      this.$vm[exp] = e.target.value
+    });
+  }
+
+  // v-html编译
+  html(node, exp) {
+    this.update(node, exp, 'html')
+  }
+
+  // 更新绑定v-model
+  modelUpdater(node, value) {
+    node.value = value;
+  }
+
   // 更新文本节点
   textUpdater(node, value) {
     node.textContent = value
+  }
+
+  // v-html更新内容
+  htmlUpdater(node, value) {
+    node.innerHTML = value;
+  }
+
+  // 事件处理
+  eventHandler(node, exp, dir) {
+    // 获取回调函数
+    const fn = this.$vm.$options.methods && this.$vm.$options.methods[exp];
+    if (dir && fn) {
+      node.addEventListener(dir, fn.bind(this.$vm))
+    }
   }
 
 }
