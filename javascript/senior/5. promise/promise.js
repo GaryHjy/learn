@@ -48,7 +48,7 @@ function resolvePromise(promise2, x, resolve, reject) {
         then.call(x, y => {
           if (called) return
           called = true
-          // 递归调用 y可能是一个promise
+          // 递归调用 then(resolve) resolve可能传递传递promise y可能是一个promise
           resolvePromise(promise2, y, resolve, reject)
         }, r => {
           if (called) return
@@ -78,6 +78,13 @@ class Promise {
     this.onRejectCallbacks = [];
 
     let resolve = val => {
+
+      if (val instanceof Promise) {
+        // 初始化new的时候，resolve可能会传递一个promise，递归调用，让resolve返回一个普通值
+        val.then(resolve, reject)
+        return
+      }
+
       if (this.status === PENDING) { // 只有pending中的状态才可以修改其promise的状态
         this.status = RESOLVED;
         this.value = val;
@@ -216,6 +223,23 @@ Promise.all = function(promises) {
     }
   })
 }
+
+// 实际上是返回一个resolve状态的promise
+Promise.resolve = function(value) {
+  return new Promise(resolve => {
+    resolve(value)
+  })
+}
+
+// 实际上是返回一个reject状态的promise
+Promise.reject = function(value) {
+  return new Promise((resolve, reject) => {
+    reject(value)
+  })
+}
+
+// promise.resolve可以接收一个promise
+// promise.reject接收promise会有等待状态
 
 // 导出
 module.exports = Promise
