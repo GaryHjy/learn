@@ -89,13 +89,15 @@ class Promise {
   }
 }
 
+// 导出
+module.exports = Promise
 
 // ------------------例子--------------------------------
-let promise = new Promise((resolve, reject) => {
-  setTimeout(() => {
-    resolve("ok")
-  }, 1000);
-})
+// let promise = new Promise((resolve, reject) => {
+//   setTimeout(() => {
+//     resolve("ok")
+//   }, 1000);
+// })
 
 // 1. 普通调用 then中两个参数方法 onfulfilled（成功） onfulfilled（失败）
 // promise.then((data) => {
@@ -105,31 +107,31 @@ let promise = new Promise((resolve, reject) => {
 // })
 
 // 2. 特殊调用
-promise.then(data => {
-  // then 方法中可以返回一个值（不是promise），会将这个值传递到下一个then方法回调中
-  return data;
-}).then(data => {
-  // 如果返回的是一个promise，那么会将这个promise的结果传递到下一个then方法回调中
-  return new Promise((resolve,reject) => {
-    setTimeout(() => {
-      // resolve('hello')
-      reject('word')
-    }, 1000);
-  })
-}).then(() => {
-  console.log('success1')
-}, err => {
-  // 如果失败函数中返回的为普通值或者promise，会走到下一个promise函数中的成功中
-  console.log('err1', err);
-  // throw new Error('失败')
-}).then(() => {
-  console.log('success2')
-}, () => {
-  // 只有当前置promise返回失败或者抛出异常的时候才会走下个promise的失败中
-  console.log('err2')
-}).catch(() => {
-  // 捕获错误，先找距离自己最近的，如果最近的没有错误处理，就会catch到
-  console.log('catch')
-}).then(() => {
-  console.log('success3')
-})
+// promise.then(data => {
+//   // then 方法中可以返回一个值（不是promise），会将这个值传递到下一个then方法回调中
+//   return data;
+// }).then(data => {
+//   // 如果返回的是一个promise，那么会将这个promise的结果传递到下一个then方法回调中
+//   return new Promise((resolve,reject) => {
+//     setTimeout(() => {
+//       // resolve('hello')
+//       reject('word')
+//     }, 1000);
+//   })
+// }).then(() => {
+//   console.log('success1')
+// }, err => {
+//   // 如果失败函数中返回的为普通值或者promise，会走到下一个promise函数中的成功中
+//   console.log('err1', err);
+//   // throw new Error('失败')
+// }).then(() => {
+//   console.log('success2')
+// }, () => {
+//   // 只有当前置promise返回失败或者抛出异常的时候才会走下个promise的失败中
+//   console.log('err2')
+// }).catch(() => {
+//   // 捕获错误，先找距离自己最近的，如果最近的没有错误处理，就会catch到
+//   console.log('catch')
+// }).then(() => {
+//   console.log('success3')
+// })
