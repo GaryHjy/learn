@@ -15,8 +15,11 @@
 // Promise状态为pending状态时，将then的中的两个函数push到存储成功的回调数组中和失败的回调数组中
 // 在resolve reject中将对应的回调数组重新执行
 // Promise链式调用then方法多次 每次调用then方法，都会默认返回一个promise新的实例
-// 如果返回的是一个值或者promise时
-// catch方法 特点：如果then中没有错误处理，默认会找到距离最近的catch
+// 如果返回的是一个值则会传递到下一个promise的成功中
+// 如果返回的事一个promise的话，则会将这个promise的结果传递到下一个promise的成功中
+// 如果then中返回一个promise的且为reject方法时，则会传递到下一个promise的失败中
+// 如果then中抛出异常的时候，则会传递到下一个promise中的失败中
+// catch方法 特点：如果then中没有错误处理，默认会找到距离最近的catch，catch也是then，遵循then的规则
 
 
 
@@ -87,22 +90,46 @@ class Promise {
 }
 
 
-
+// ------------------例子--------------------------------
 let promise = new Promise((resolve, reject) => {
   setTimeout(() => {
     resolve("ok")
   }, 1000);
 })
 
-// then中两个参数方法 onfulfilled（成功） onfulfilled（失败）
-promise.then((data) => {
-  console.log('success', data)
-}, (error) => {
-  console.log('error', error)
-})
+// 1. 普通调用 then中两个参数方法 onfulfilled（成功） onfulfilled（失败）
+// promise.then((data) => {
+//   console.log('success', data)
+// }, (error) => {
+//   console.log('error', error)
+// })
 
-promise.then((data) => {
-  console.log('success', data)
-}, (error) => {
-  console.log('error', error)
+// 2. 特殊调用
+promise.then(data => {
+  // then 方法中可以返回一个值（不是promise），会将这个值传递到下一个then方法回调中
+  return data;
+}).then(data => {
+  // 如果返回的是一个promise，那么会将这个promise的结果传递到下一个then方法回调中
+  return new Promise((resolve,reject) => {
+    setTimeout(() => {
+      // resolve('hello')
+      reject('word')
+    }, 1000);
+  })
+}).then(() => {
+  console.log('success1')
+}, err => {
+  // 如果失败函数中返回的为普通值或者promise，会走到下一个promise函数中的成功中
+  console.log('err1', err);
+  // throw new Error('失败')
+}).then(() => {
+  console.log('success2')
+}, () => {
+  // 只有当前置promise返回失败或者抛出异常的时候才会走下个promise的失败中
+  console.log('err2')
+}).catch(() => {
+  // 捕获错误，先找距离自己最近的，如果最近的没有错误处理，就会catch到
+  console.log('catch')
+}).then(() => {
+  console.log('success3')
 })
