@@ -37,6 +37,8 @@ function resolvePromise(promise2, x, resolve, reject) {
 
   // 2. 判断x的类型，x如果是对象或者函数，说明它有可能为一个promise
 
+  // 用于记录是否已经调用，防止promise即调了成功 又调失败 调失败又调用成功
+  let called;
   if ((typeof x === 'object' && x !== null) || typeof x === 'function') {
     // 如果为promise的话有then方法
     try {
@@ -44,12 +46,19 @@ function resolvePromise(promise2, x, resolve, reject) {
       if (typeof then === 'function') { // 走到这里确定为promise
         // 执行then方法，获取then方法的结果，传递至promise2
         then.call(x, y => {
-          resolve(y)
+          if (called) return
+          called = true
+          // 递归调用 y可能是一个promise
+          resolvePromise(promise2, y, resolve, reject)
         }, r => {
+          if (called) return
+          called = true
           reject(r)
         })
       }
     } catch (e) {
+      if (called) return
+      called = true
       reject(e); // 取then方法失败，抛出错误
     }
   } else {
@@ -91,7 +100,6 @@ class Promise {
       executor(resolve, reject);
     } catch (error) {
       // 手动调用reject向下传递
-      console.log(error);
       reject(error);
     }
   }
@@ -107,7 +115,6 @@ class Promise {
            let x = onFulfilled(this.value);
            resolvePromise(promise2, x, resolve, reject);
          } catch (e) { // then方法报错，走到外层的错误处理，调用promise2的reject函数
-           console.log(e)
            reject(e);
          }
        }, 0);

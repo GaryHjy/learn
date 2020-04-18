@@ -27,11 +27,30 @@ let promise = new Promise(resolve => {
 
 // Step2 如果返回的是一个promise
 
+// let promise2 = promise.then(() => {
+//   return new Promise((resolve) => {
+//     setTimeout(() => {
+//       resolve('return promise')
+//     }, 1000);
+//   })
+// })
+
+// promise2.then(data => {
+//   console.log('promise', data)
+// })
+
+// Step3 如果return promise 并且resolve的还是一个promise
 let promise2 = promise.then(() => {
   return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve('return promise')
-    }, 1000);
+    resolve(new Promise(resolve => {
+      setTimeout(() => {
+        resolve(new Promise(resolve => {
+          setTimeout(() => {
+            resolve('return promise')
+          }, 1000);
+        }))
+      }, 1000);
+    }))
   })
 })
 
