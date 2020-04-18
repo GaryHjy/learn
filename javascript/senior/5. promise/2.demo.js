@@ -40,13 +40,32 @@ let promise = new Promise(resolve => {
 // })
 
 // Step3 如果return promise 并且resolve的还是一个promise
+// let promise2 = promise.then(() => {
+//   return new Promise((resolve) => {
+//     resolve(new Promise(resolve => {
+//       setTimeout(() => {
+//         resolve(new Promise(resolve => {
+//           setTimeout(() => {
+//             resolve('return promise')
+//           }, 1000);
+//         }))
+//       }, 1000);
+//     }))
+//   })
+// })
+
+// promise2.then(data => {
+//   console.log('promise', data)
+// })
+
+// Step4 如果then多次
 let promise2 = promise.then(() => {
   return new Promise((resolve) => {
     resolve(new Promise(resolve => {
       setTimeout(() => {
-        resolve(new Promise(resolve => {
+        resolve(new Promise((resolve, reject) => {
           setTimeout(() => {
-            resolve('return promise')
+            reject('return promise')
           }, 1000);
         }))
       }, 1000);
@@ -54,6 +73,8 @@ let promise2 = promise.then(() => {
   })
 })
 
-promise2.then(data => {
+promise2.then().then().then(data => {
   console.log('promise', data)
+}, err => {
+  console.log(err)
 })

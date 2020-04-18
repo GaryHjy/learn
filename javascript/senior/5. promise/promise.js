@@ -105,6 +105,11 @@ class Promise {
   }
 
   then(onFulfilled, onRejected) {
+
+    // 防止then多次没有传递onFulfilled onRejected 方法
+    onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : v => v;
+    onRejected = typeof onRejected === 'function' ? onRejected : err => {throw err}
+
     // 实现链式调用，创建一个promise
     let promise2 = new Promise((resolve, reject) => {
       
