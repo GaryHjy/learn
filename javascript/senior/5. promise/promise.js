@@ -27,6 +27,37 @@ const PENDING = 'PENDING'; // 等待态
 const RESOLVED = 'RESOLVED'; // 成功态
 const REJECTED = 'REJECTED'; // 失败态
 
+// promise2, x, resolve, reject
+function resolvePromise(promise2, x, resolve, reject) {
+  // 此方法兼容所有promise库，n个库中间，执行流程一致
+  // 1. 不能引用通过对象，避免死循环
+  if (promise2 === x) {
+    return reject(new Error('Chaining cycle detected for promise #<Promise>'))
+  }
+
+  // 2. 判断x的类型，x如果是对象或者函数，说明它有可能为一个promise
+
+  if ((typeof x === 'object' && x !== null) || typeof x === 'function') {
+    // 如果为promise的话有then方法
+    try {
+      let then = x.then;
+      if (typeof then === 'function') { // 走到这里确定为promise
+        // 执行then方法，获取then方法的结果，传递至promise2
+        then.call(x, y => {
+          resolve(y)
+        }, r => {
+          reject(r)
+        })
+      }
+    } catch (e) {
+      reject(e); // 取then方法失败，抛出错误
+    }
+  } else {
+    // 反之x为普通值
+    resolve(x)
+  }
+}
+
 class Promise {
   constructor(executor) {
 
@@ -66,26 +97,62 @@ class Promise {
   }
 
   then(onFulfilled, onRejected) {
-    if (this.status === RESOLVED) {
-      onFulfilled(this.value);
-    }
-    if (this.status === REJECTED) {
-      onRejected(this.reason);
-    }
-    // PENDING状态中的executor为异步逻辑
-    if (this.status === PENDING) {
+    // 实现链式调用，创建一个promise
+    let promise2 = new Promise((resolve, reject) => {
+      
+      if (this.status === RESOLVED) {
+        // 执行then中的方法，可能返回一个普通的值或者promise，也有不存在的情况，如果发现为promise，需要执行promise，获取到promise的值与状态，传递给promise2
+       setTimeout(() => {
+         try {
+           let x = onFulfilled(this.value);
+           resolvePromise(promise2, x, resolve, reject);
+         } catch (e) { // then方法报错，走到外层的错误处理，调用promise2的reject函数
+           console.log(e)
+           reject(e);
+         }
+       }, 0);
+      }
+      if (this.status === REJECTED) {
+        setTimeout(() => {
+          try {
+            let x = onRejected(this.reason);
+            resolvePromise(promise2, x, resolve, reject);
+          } catch (e) {
+            reject(e);
+        }
+        }, 0);
+      }
+      // PENDING状态中的executor为异步逻辑
+      if (this.status === PENDING) {
 
-      // 将onFulfilled存储到数组中
-      this.onResolveCallbacks.push(() => {
-        // push一个函数，方便扩展
-        onFulfilled(this.value);
-      })
+        // 将onFulfilled存储到数组中
+        this.onResolveCallbacks.push(() => {
+          // push一个函数，方便扩展
+          setTimeout(() => {
+            try {
+              let x = onFulfilled(this.value);
+              resolvePromise(promise2, x, resolve, reject);
+            } catch (e) {
+              reject(e)
+            }
+          }, 0);
+        })
 
-      // 将onRejected存储到数组中
-      this.onRejectCallbacks.push(() => {
-        onRejected(this.reason);
-      })
-    }
+        // 将onRejected存储到数组中
+        this.onRejectCallbacks.push(() => {
+          setTimeout(() => {
+            try {
+              let x = onRejected(this.reason);
+              resolvePromise(promise2, x, resolve, reject);
+            } catch (e) {
+              reject(e)
+            }
+          }, 0);
+        })
+      }
+    })
+
+    return promise2;
   }
 }
 
