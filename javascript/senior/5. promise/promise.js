@@ -166,6 +166,55 @@ class Promise {
 
     return promise2;
   }
+
+  // catch方法本质上其实就是一个then函数
+  catch(errCallback) {
+    return this.then(null, errCallback)
+  }
+}
+
+// 判断是不是promise
+function isPromise(x) {
+  if (typeof x === 'object' && x !== null || typeof x === 'function') {
+    if (typeof x.then === 'function') {
+      return true
+    }
+  } else {
+    return false
+  }
+}
+
+Promise.defer = Promise.deferred = function() {
+  const dfd = {};
+  dfd.promise = new Promise((resolve, reject) => {
+    dfd.resolve = resolve;
+    dfd.reject = reject;
+  })
+  return dfd;
+}
+
+// promise.all 特点是让所有函数并行执行
+Promise.all = function(promises) {
+  return new Promise((resolve, reject) => {
+    let arr = [];
+    let i = 0;
+    function processData(val, i) {
+      arr[i] = val;
+      if (++i === promises.length) {
+        resolve(arr);
+      }
+    }
+    for(let i = 0 ; i < promises.length; i++) {
+      let currentVal = promises[i];
+      if (isPromise(currentVal)) {
+        currentVal.then(y => {
+          processData(y, i)
+        }, reject)
+      } else {
+        processData(currentVal, i)
+      }
+    }
+  })
 }
 
 // 导出
