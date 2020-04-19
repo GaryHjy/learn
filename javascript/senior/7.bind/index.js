@@ -9,7 +9,9 @@ Function.prototype.myBind = function (context) {
   function Fn() {} // Object.create() 原理
   function fBound() {
     let args = Array.prototype.slice.call(arguments);
-    that.apply(context, bindArgs.concat(args));
+    // 当前this判断context
+    let curContext = this instanceof fBound ? this : context;
+    that.apply(curContext, bindArgs.concat(args));
   }
   Fn.prototype = this.prototype;
   fBound.prototype = new Fn();
