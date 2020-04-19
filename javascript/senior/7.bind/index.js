@@ -3,19 +3,20 @@
 // 3) 如果绑定的函数被new了，当前函数的this是当前的实例
 // 4）new出来的结果可以找到原有类的原型
 
+// 实现一个myBind函数， 如果面试的时候手写一个bind的话建议加上兼容性写法
 Function.prototype.myBind = function (context) {
-  let that = this;
-  let bindArgs = Array.prototype.slice.call(arguments, 1);
-  function Fn() {} // Object.create() 原理
-  function fBound() {
-    let args = Array.prototype.slice.call(arguments);
+  var me = this;
+  var args = Array.prototype.slice.call(arguments, 1);
+  function F() {} // Object.create() 原理
+  F.prototype = this.prototype;
+  function bound() {
+    var innerArgs = Array.prototype.slice.call(arguments);
+    var finalArgs = innerArgs.concat(args);
     // 当前this判断context
-    let curContext = this instanceof fBound ? this : context;
-    that.apply(curContext, bindArgs.concat(args));
+    return me.apply(this instanceof F ? this : context, finalArgs);
   }
-  Fn.prototype = this.prototype;
-  fBound.prototype = new Fn();
-  return fBound;
+  bound.prototype = new F();
+  return bound;
 }
 
 let obj = {
