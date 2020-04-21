@@ -5,6 +5,47 @@
 流传的说法：谁调用它，this 就指向谁。  
 总结：this 的指向，是在调用函数时根据执行上下文所动态确定的。
 
+```js
+function Foo() {
+  getName = function() {
+    console.log(1);
+  }
+  return this;
+}
+
+Foo.getName = function() {
+  console.log(2);
+}
+
+Foo.prototype.getName = function() {
+  console.log(3);
+}
+
+var getName = function() {
+  console.log(4);
+}
+
+function getName() {
+  console.log(5);
+}
+
+Foo.getName();
+getName();
+Foo().getName();
+new Foo.getName();
+new Foo().getName();
+
+```
+输出结果
+```js
+Foo.getName(); // 2  函数的静态方法
+getName(); // 4  // 变量提升
+Foo().getName(); //1  // 函数作用域
+new Foo.getName(); // 2 // 函数的静态方法 new优先级
+new Foo().getName(); // 3 // 实例方法
+
+```
+
 - 优先级
 
 ```
