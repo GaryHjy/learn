@@ -37,4 +37,19 @@ function instanceOf(A, B) {
 
 console.log('instanceOf', instanceOf([], Object))
 
-console.log(instanceOf('str', String))
+let str = 'str'
+console.log(str instanceof String)
+
+// Symbol.hasInstance
+console.log(String[Symbol.hasInstance](str))
+
+class ValidateStr {
+  static [Symbol.hasInstance](x) {
+    return typeof x === 'string'
+  }
+}
+
+// console.log(ValidateStr[Symbol.hasInstance]('hello'))
+console.log('hello' instanceof ValidateStr)
+
+// 判断类型还有一种，可以找对象Constructor
