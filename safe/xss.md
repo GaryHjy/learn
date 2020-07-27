@@ -3,7 +3,7 @@
 Cross Site Scripting  
 跨站脚本攻击
 
-XSS(Cross-Site Scripting)，夸张脚本攻击，应缩写与CSS重名，故叫XSS。跨站脚本攻击是指通过存在安全漏洞的Web网站注册用户的浏览器内运行非法的非本站点HTML标签或javascript进行的一种攻击。
+XSS(Cross-Site Scripting)，跨站脚本攻击，因缩写与CSS重名，故叫XSS。跨站脚本攻击是指通过存在安全漏洞的Web网站注册用户的浏览器内运行非法的非本站点HTML标签或javascript进行的一种攻击。
 
 分类：
 - 反射型 - url参数注入
