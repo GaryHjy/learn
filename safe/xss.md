@@ -20,6 +20,25 @@ XSS(Cross-Site Scripting)，跨站脚本攻击，因缩写与CSS重名，故叫X
 - 直接将script标签保存到数据库，页面请求数据时会执行script标签
 
 防范手段：
+
+- 转义字符
+```js
+// 将特殊的字符引号 尖括号 斜杆进行转义
+// 黑名单
+
+function escape(str) {
+  str = str.replace(/&/g, '&amp;')
+  str = str.replace(/</g, '&lt;')
+  str = str.replace(/>/g, '&gt;')
+  str = str.replace(/"/g, '&quto;')
+  str = str.replace(/'/g, '&#39;')
+  str = str.replace(/`/g, '&#96;')
+  str = str.replace(/\//g, '&#x2F;')
+  return str
+}
+// &lt;script src="http://xxx.com/xxx.js"&gt;&lt;/script&gt;
+```
+
 - HEAD设置  
 ```js
 // 1 启用XSS过滤(浏览器器默认)
@@ -41,5 +60,13 @@ Content-Security-Policy: default-src 'self'
 Content-Security-Policy: img-src https://*
 // 不允许加载任何来源框架 
 Content-Security-Policy: child-src 'none'
+```
+
+- HttpOnly Cookie  
+
+预防XSS攻击窃取用户cookie最有效的防御⼿段。Web应用程序在设置cookie时，将其属性设为HttpOnly，就可以避免该⽹页的cookie被客户端恶意JavaScript窃取，保护用户cookie信息。
+
+```js
+response.addHeader("Set-Cookie", "uid=112; Path=/; HttpOnly")
 ```
 
