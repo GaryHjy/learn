@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOMContentLoaded</title>
+</head>
+<body>
+  <h1 id="title">DOMContentLoaded</h1>
+
+  <script>
+    console.log("script executing, state is " + document.readyState);
+  </script>
+  <script>
+    setTimeout(function() {
+      document.querySelector("#title").style.color = "red";
+      console.log("element painting and the state is " + document.readyState);
+    },2000)
+    </script>
+  <script src="./index.js"></script>
+</body>
+</html>
