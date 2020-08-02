@@ -154,7 +154,7 @@ constructor
 
 ```
 instanceof
-缺点：不能识别出基本的数据类型 number、boolean、string、undefined、unll、Symbol
+缺点：不能识别出基本的数据类型 number、boolean、string、undefined、null、Symbol
 ```
 
 ```
