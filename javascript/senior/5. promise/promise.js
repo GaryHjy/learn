@@ -115,21 +115,23 @@ class Promise {
 
     // 防止then多次没有传递onFulfilled onRejected 方法
     onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : v => v;
-    onRejected = typeof onRejected === 'function' ? onRejected : err => {throw err}
+    onRejected = typeof onRejected === 'function' ? onRejected : err => {
+      throw err
+    }
 
     // 实现链式调用，创建一个promise
     let promise2 = new Promise((resolve, reject) => {
-      
+
       if (this.status === RESOLVED) {
         // 执行then中的方法，可能返回一个普通的值或者promise，也有不存在的情况，如果发现为promise，需要执行promise，获取到promise的值与状态，传递给promise2
-       setTimeout(() => {
-         try {
-           let x = onFulfilled(this.value);
-           resolvePromise(promise2, x, resolve, reject);
-         } catch (e) { // then方法报错，走到外层的错误处理，调用promise2的reject函数
-           reject(e);
-         }
-       }, 0);
+        setTimeout(() => {
+          try {
+            let x = onFulfilled(this.value);
+            resolvePromise(promise2, x, resolve, reject);
+          } catch (e) { // then方法报错，走到外层的错误处理，调用promise2的reject函数
+            reject(e);
+          }
+        }, 0);
       }
       if (this.status === REJECTED) {
         setTimeout(() => {
@@ -138,7 +140,7 @@ class Promise {
             resolvePromise(promise2, x, resolve, reject);
           } catch (e) {
             reject(e);
-        }
+          }
         }, 0);
       }
       // PENDING状态中的executor为异步逻辑
@@ -175,7 +177,7 @@ class Promise {
   }
 
   // catch方法本质上其实就是一个then函数
-  catch(errCallback) {
+  catch (errCallback) {
     return this.then(null, errCallback)
   }
 }
@@ -191,7 +193,7 @@ function isPromise(x) {
   }
 }
 
-Promise.defer = Promise.deferred = function() {
+Promise.defer = Promise.deferred = function () {
   const dfd = {};
   dfd.promise = new Promise((resolve, reject) => {
     dfd.resolve = resolve;
@@ -201,17 +203,18 @@ Promise.defer = Promise.deferred = function() {
 }
 
 // promise.all 特点是让所有函数并行执行
-Promise.all = function(promises) {
+Promise.all = function (promises) {
   return new Promise((resolve, reject) => {
     let arr = [];
     let i = 0;
+
     function processData(val, i) {
       arr[i] = val;
       if (++i === promises.length) {
         resolve(arr);
       }
     }
-    for(let i = 0 ; i < promises.length; i++) {
+    for (let i = 0; i < promises.length; i++) {
       let currentVal = promises[i];
       if (isPromise(currentVal)) {
         currentVal.then(y => {
@@ -225,14 +228,14 @@ Promise.all = function(promises) {
 }
 
 // 实际上是返回一个resolve状态的promise
-Promise.resolve = function(value) {
+Promise.resolve = function (value) {
   return new Promise(resolve => {
     resolve(value)
   })
 }
 
 // 实际上是返回一个reject状态的promise
-Promise.reject = function(value) {
+Promise.reject = function (value) {
   return new Promise((resolve, reject) => {
     reject(value)
   })
