@@ -16,7 +16,7 @@
 // 在resolve reject中将对应的回调数组重新执行
 // Promise链式调用then方法多次 每次调用then方法，都会默认返回一个promise新的实例
 // 如果返回的是一个值则会传递到下一个promise的成功中
-// 如果返回的事一个promise的话，则会将这个promise的结果传递到下一个promise的成功中
+// 如果返回的是一个promise的话，则会将这个promise的结果传递到下一个promise的成功中
 // 如果then中返回一个promise的且为reject方法时，则会传递到下一个promise的失败中
 // 如果then中抛出异常的时候，则会传递到下一个promise中的失败中
 // catch方法 特点：如果then中没有错误处理，默认会找到距离最近的catch，catch也是then，遵循then的规则
