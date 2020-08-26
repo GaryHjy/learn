@@ -16,6 +16,8 @@
 import xxx from 'xxx';
 ```
 
+特点：编译后加载
+
 
 - Commonjs
 
@@ -24,3 +26,5 @@ Node环境下的模块化方案
 ```js
 const xxx = require('xxx');
 ```
+
+特点：运行时，同步执行
