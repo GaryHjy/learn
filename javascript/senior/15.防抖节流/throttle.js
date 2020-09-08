@@ -1,7 +1,7 @@
 (function() {
 
-  window.addEventListener('resize', throttle(function(){
-    console.log(11111);
+  window.addEventListener('scroll', throttle(function(){
+    console.log('scroll');
   }))
 
   function output() {
@@ -9,11 +9,15 @@
   }
 
   function throttle(fn, wait = 500) {
-    let timer = null;
+    let flag = true, timer = null;
+
     return function(...args) {
+      if (!flag) return
       clearTimeout(timer)
+      flag = false;
       timer = setTimeout(() => {
-        fn.apply(this,args)
+        fn.apply(this, args);
+        flag = true;
       }, wait);
     }
   }
