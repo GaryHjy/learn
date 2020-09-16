@@ -31,14 +31,8 @@ Function.prototype.myCall = function(context) {
   // 判断上下文是否存在
   context = context ? Object(context) : window;
   context.fn = this;
-  let args = [];
-  // 忽略第一个参数开始循环
-  for(let i = 1; i < arguments.length; i++) {
-    args.push('arguments['+i+']')
-  }
-  // args ["arguments[1]", "arguments[2]"]
-  // 利用数组toString的特性，将args装换成字符串 '','',''
-  let result = eval('context.fn('+args+')')
+  const args = [...arguments].slice(1);
+  const result = context.fn(args);
   delete context.fn; // 删除context上挂载的fn
   return result; // 函数是有返回值
 }
