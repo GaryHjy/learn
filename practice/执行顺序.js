@@ -21,7 +21,7 @@ function getName() {
   console.log(5);
 }
 
-FFoo.getName(); // 2  函数的静态方法
+Foo.getName(); // 2  函数的静态方法
 getName(); // 4  // 变量提升
 Foo().getName(); //1  // 函数作用域
 new Foo.getName(); // 2 // 函数的静态方法 new优先级
