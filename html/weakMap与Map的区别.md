@@ -1,0 +1,1 @@
+# weakMap与Map的区别
