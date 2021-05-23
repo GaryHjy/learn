@@ -1,0 +1,1 @@
+# JavaScript中的活跃对象
