@@ -16,7 +16,7 @@ const e = {
   }
 }
 
-// 每次发布都会粗发回调函数
+// 每次发布都会触发回调函数
 e.on(function(obj) {
   // 进行判断操作
   if (Object.keys(obj).length === 2) {
