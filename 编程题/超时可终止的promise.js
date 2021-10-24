@@ -1,4 +1,10 @@
 function timeout(fn, time) {
+  let timeout = new Promise(resolve => {
+    setTimeout(resolve, time)
+  }).then(() => {
+    throw new Error('timeout')
+  })
+  return (...args) => Promise.race([fn(args), timeout])
 }
 
 function test(name) {
