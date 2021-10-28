@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BFC</title>
+  <!-- 1. margin重合demo -->
+  <!-- <style>
+    .container {
+      /* float: left; */
+      /* display: inline-block; */
+      /* display: flex; */
+      overflow: hidden;
+    }
+    .box {
+      width: 180px;
+      height: 180px;
+      margin: 10px;
+    }
+    .box1 {
+      background-color: lightblue;
+    }
+
+    .box2 {
+      background-color: lightcoral;
+    }
+  </style> -->
+  <!-- 2. margin塌陷 -->
+  <!-- <style>
+    .container {
+      width: 200px;
+      height: 200px;
+      background-color: lightblue;
+      /* float: left; */
+      /* display: inline-block; */
+      /* position: absolute; */
+      /* border-top: 1px solid #000; */
+      overflow: hidden;
+    }
+    .box {
+      width: 100px;
+      height: 100px;
+      margin-top: 40px;
+      background-color: lightcoral;
+    }
+  </style> -->
+  <!-- 3. 高度坍塌 -->
+  <style>
+    .container {
+      width: 300px;
+      background-color: lightblue;
+      border: 1px solid #000;
+      /* display: inline-block; */
+      /* float: left; */
+      /* position: absolute; */
+      overflow: hidden;
+    }
+    .box {
+      width: 150px;
+      height: 150px;
+      background-color: lightcoral;
+      float: left;
+    }
+  </style>
+</head>
+<body>
+  <!-- 1. margin重合demo -->
+  <!-- <div class="container">
+    <div class="box box1"></div>
+  </div>
+  <div class="container">
+    <div class="box box2"></div>
+  </div> -->
+  
+  <!-- 2. margin塌陷 -->
+  <!-- <div class="container">
+    <div class="box"></div>
+  </div> -->
+
+  <!-- 3. 高度坍塌 -->
+  <div class="container">
+    <div class="box"></div>
+  </div>
+</body>
+</html>
