@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>addEventListener</title>
+  <style>
+    #parent {
+      width: 500px;
+      height: 500px;
+      border: 1px solid #000;
+    }
+    #son {
+      width: 300px;
+      height: 300px;
+      border: 1px solid #000;
+    }
+  </style>
+</head>
+<body>
+  <div id="parent">
+    <div id="son"></div>
+  </div>
+
+  <script>
+    (function() {
+      const parent = document.querySelector('#parent');
+      const son = document.querySelector('#son');
+      parent.addEventListener('click', function(e) {
+        console.log('parent click', e.target)
+      })
+      son.addEventListener('click', function() {
+        console.log('son click')
+      })
+    })()
+    // 事件捕获，有外而内
+    // 事件冒泡，由内而外
+    // addEventListener 默认的第三个参数为false，默认为时间冒泡，如果设置为true，则为事件捕获
+  </script>
+</body>
+</html>
