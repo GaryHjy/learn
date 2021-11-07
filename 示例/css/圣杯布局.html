@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>圣杯布局</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      width: 800px;
+      height: 600px;
+      padding-left: 120px;
+      padding-right: 130px;
+      margin: 0 auto;
+    }
+
+    .column {
+      float: left;
+      height: 100%;
+    }
+
+    .content {
+      width: 100%;
+      background-color: green;
+    }
+
+    .left {
+      position: relative;
+      width: 120px;
+      background-color: red;
+      margin-left: -100%;
+      left: -120px;
+    }
+
+    .right {
+      width: 130px;
+      background-color: orange;
+      margin-right: -130px;
+    }
+  </style>
+</head>
+<body>
+  <!-- 目的 -->
+  <!-- 两侧内容宽度固定，中间内容宽度自适应
+  三栏布局，中间一栏最先加载、渲染出来 -->
+
+  <!-- 实现方式 -->
+  <!-- float + margin -->
+
+  <div class="container">
+    <div class="content column">main</div>
+    <div class="left column">left</div>
+    <div class="right column">right</div>
+  </div>
+</body>
+</html>
