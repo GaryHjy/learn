@@ -10,7 +10,20 @@ delayToEcho("msg", (err, msg) => {});
 
 // 实现代码
 function promisify(fn) {
-
+  return (...args) => {
+    return new Promise((resolve, reject) => {
+      try {
+        fn(...args, (err, msg) => {
+          if (err) {
+            reject(err)
+          }
+          resolve(msg)
+        })
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
 }
 
 promisify(delayToEcho)("msg")
