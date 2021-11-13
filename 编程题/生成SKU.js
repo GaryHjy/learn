@@ -1,7 +1,7 @@
 // 生成SKU
 // 已知规格数据
 const spu = 'AB1234567';
-const specList = [ 
+const specList = [
   ["red", "yellow"],
   ["XL", "S"], 
   ['a1', 'a2'],
@@ -27,3 +27,17 @@ const specList = [
   AB1234567-yellow-S-a2-b2;
   ....
 */
+
+
+// 两个for循环，暴力
+function gen(str, arr) {
+  return arr.reduce((result, item) => {
+    let r = []
+    result.forEach(e => {
+      r = r.concat(item.map(i => `${e}-${i}`))
+    })
+    return r
+  }, [str])
+}
+
+console.log(gen(spu, specList))
