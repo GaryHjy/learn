@@ -33,21 +33,19 @@ const jsonTree = [{
 ]
 
 function flatArray(treeData) {
-return treeData.reduce((result, current) => {
-  result.push(current)
-  if (Array.isArray(current.children)) {
-    result = result.concat(flatArray(current.children))
-  }
-  return result
-}, [])
+  return treeData.reduce((result, current) => {
+    result.push(current)
+    if (Array.isArray(current.children)) {
+      result = result.concat(flatArray(current.children))
+    }
+    return result
+  }, [])
 }
-
-// [].flat
 
 
 function getKey(treeData, id) {
-const list = flatArray(treeData)
-return list.find(el => el.id === id)
+  const list = flatArray(treeData)
+  return list.find(el => el.id === id)
 }
 
 const data = getKey(jsonTree, 7)
