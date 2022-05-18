@@ -11,7 +11,7 @@ Function.prototype.myBind = function (context) {
   F.prototype = this.prototype;
   function bound() {
     var innerArgs = Array.prototype.slice.call(arguments);
-    var finalArgs = innerArgs.concat(args);
+    var finalArgs = args.concat(innerArgs);
     // 当前this判断context
     return me.apply(this instanceof F ? this : context, finalArgs);
   }
