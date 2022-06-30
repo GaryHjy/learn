@@ -1,12 +1,12 @@
 var isPalindrome = function(x) {
-  if(!x < 0) return false
+  if(x < 0) return false
   let str = x.toString()
-    for(let i = 0;i < str.length / 2;i++){
-      if(str[i] != str[str.length - 1 - i]){
-        return false
-      }
+  for(let i = 0;i < str.length / 2;i++){
+    if(str[i] != str[str.length - 1 - i]){
+      return false
     }
-    return true
+  }
+  return true
 };
 
 const result = isPalindrome(12321)
