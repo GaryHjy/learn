@@ -5,8 +5,8 @@
 //     if(str[i] !== str[str.length - 1 - i]) {
 //       return false
 //     }
-//     return true;
 //   }
+//   return true;
 // };
 
 function isPalindrome(x) {
