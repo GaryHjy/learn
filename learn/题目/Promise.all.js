@@ -14,7 +14,19 @@ const successPromise2 = new Promise((resolve, reject) => {
   }, 1000);
 })
 
+const errorPromise = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    reject('errorPromise')
+  }, 1000);
+})
+
 Promise.customAll([successPromise, successPromise2]).then(res => {
+  console.log(res);
+}).catch(err => {
+  console.log('err', err);
+})
+
+Promise.customAll([successPromise, errorPromise]).then(res => {
   console.log(res);
 }).catch(err => {
   console.log('err', err);
